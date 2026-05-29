@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#060912;color:#dde4f0;line-height:1.6;overflow-x:hidden}
+
+/* HERO */
+.hero{position:relative;padding:5rem 2rem 4rem;text-align:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 130% 70% at 50% -10%,rgba(34,197,94,0.1) 0%,rgba(15,118,200,0.08) 45%,transparent 70%)}
+.grid-pat{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:44px 44px;pointer-events:none}
+.hero-chip{display:inline-flex;align-items:center;gap:7px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#4ade80;border-radius:20px;font-size:11px;font-weight:700;padding:5px 15px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem}
+.hero h1{font-size:clamp(2.8rem,7vw,4.8rem);font-weight:800;line-height:1.05;letter-spacing:-.03em;background:linear-gradient(135deg,#fff 20%,#86efac 60%,#60a5fa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.6rem}
+.hero-tagline{font-size:1.1rem;color:#64748b;font-weight:500;margin-bottom:2rem}
+.hero-tagline em{color:#4ade80;font-style:normal}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tc{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#94a3b8;border-radius:6px;font-size:12px;font-weight:500;padding:4px 12px}
+.tc.hi{border-color:rgba(74,222,128,0.3);color:#4ade80;background:rgba(74,222,128,0.06)}
+.tc.hi2{border-color:rgba(96,165,250,0.3);color:#60a5fa;background:rgba(96,165,250,0.06)}
+.tc.hi3{border-color:rgba(251,191,36,0.3);color:#fbbf24;background:rgba(251,191,36,0.06)}
+
+/* STAT BAR */
+.statbar{background:#0b0e1a;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+.stat{padding:1.3rem 1rem;text-align:center;border-right:1px solid rgba(255,255,255,0.05)}
+.stat:last-child{border-right:none}
+.sn{display:block;font-size:1.8rem;font-weight:800;line-height:1;background:linear-gradient(135deg,#4ade80,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#4b5563;margin-top:4px}
+
+/* OPENING STATEMENT */
+.statement{padding:3rem 2rem;max-width:860px;margin:0 auto;text-align:center}
+.statement p{font-size:1.05rem;color:#94a3b8;line-height:1.8}
+.statement strong{color:#e2e8f0;font-weight:600}
+
+/* SECTIONS */
+.sec{padding:2.5rem 2rem;max-width:1100px;margin:0 auto}
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:1.8rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,0.05)}
+.si{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.si-green{background:rgba(74,222,128,0.1)}
+.si-blue{background:rgba(96,165,250,0.1)}
+.si-amber{background:rgba(251,191,36,0.1)}
+.si-violet{background:rgba(167,139,250,0.1)}
+.si-cyan{background:rgba(34,211,238,0.1)}
+.si-red{background:rgba(248,113,113,0.1)}
+.sh-title{font-size:1.15rem;font-weight:700;color:#fff}
+.sh-sub{font-size:12px;color:#4b5563;margin-top:2px}
+.divider{height:1px;background:rgba(255,255,255,0.05)}
+
+/* CARDS */
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
+.card{background:#0b0e1a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.3rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.card:hover{border-color:rgba(74,222,128,0.25);transform:translateY(-2px)}
+.ct{position:absolute;top:0;left:0;right:0;height:2px}
+.ct-green{background:linear-gradient(90deg,#22c55e,#15803d)}
+.ct-blue{background:linear-gradient(90deg,#3b82f6,#1d4ed8)}
+.ct-amber{background:linear-gradient(90deg,#fbbf24,#d97706)}
+.ct-violet{background:linear-gradient(90deg,#8b5cf6,#6d28d9)}
+.ct-cyan{background:linear-gradient(90deg,#22d3ee,#0891b2)}
+.ct-red{background:linear-gradient(90deg,#f87171,#dc2626)}
+.cpub{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;color:#4b5563;flex-wrap:wrap}
+.d{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.d-dl{background:#4ade80}.d-tb{background:#60a5fa}.d-ct{background:#f97316}.d-bi{background:#34d399}
+.card h3{font-size:14px;font-weight:600;color:#e2e8f0;line-height:1.4;margin-bottom:8px}
+.card p{font-size:12px;color:#4b5563;line-height:1.6}
+.cfoot{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.chip{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em}
+.ch-green{background:rgba(74,222,128,0.1);color:#4ade80}
+.ch-blue{background:rgba(96,165,250,0.1);color:#60a5fa}
+.ch-amber{background:rgba(251,191,36,0.1);color:#fbbf24}
+.ch-violet{background:rgba(167,139,250,0.1);color:#a78bfa}
+.ch-cyan{background:rgba(34,211,238,0.1);color:#22d3ee}
+.ch-red{background:rgba(248,113,113,0.1);color:#f87171}
+.clink{font-size:11px;color:#374151;text-decoration:none;display:flex;align-items:center;gap:3px}
+.clink:hover{color:#4ade80}
+
+/* SPOTLIGHT */
+.spotlight{background:linear-gradient(135deg,#080f14 0%,#071020 100%);border:1px solid rgba(74,222,128,0.2);border-radius:14px;padding:1.8rem;position:relative;overflow:hidden}
+.spotlight::before{content:'';position:absolute;top:-80px;right:-80px;width:250px;height:250px;background:radial-gradient(circle,rgba(74,222,128,0.06),transparent 70%);pointer-events:none}
+.sp-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4ade80;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.spotlight h3{font-size:1.05rem;font-weight:700;color:#fff;line-height:1.4;margin-bottom:10px}
+.spotlight p{font-size:13px;color:#6b7280;line-height:1.65}
+.impact-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.impact{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;color:#86efac}
+.excl-badge{position:absolute;top:14px;right:14px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.3);color:#4ade80;font-size:9px;font-weight:800;letter-spacing:.15em;padding:3px 8px;border-radius:4px}
+
+/* VIRAL SECTION */
+.viral-card{background:#0b0e1a;border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.3rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.viral-card:hover{border-color:rgba(251,191,36,0.3);transform:translateY(-2px)}
+.viral-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.viral-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);color:#fbbf24;font-size:9px;font-weight:800;letter-spacing:.12em;padding:3px 8px;border-radius:4px;text-transform:uppercase;white-space:nowrap}
+.viral-pub{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4b5563;display:flex;align-items:center;gap:5px}
+.viral-card h3{font-size:14px;font-weight:600;color:#e2e8f0;line-height:1.4;margin-bottom:8px}
+.viral-card p{font-size:12px;color:#4b5563;line-height:1.6}
+.eng-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05)}
+.eng{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#94a3b8}
+.eng svg{opacity:.6}
+
+/* JD MATCH TABLE */
+.match-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:1.5rem}
+.mc{background:#0b0e1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:1.2rem;display:flex;gap:12px}
+.check{width:26px;height:26px;border-radius:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:#4ade80;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.jd-q{background:rgba(96,165,250,0.06);border-left:2px solid #3b82f6;border-radius:0 6px 6px 0;padding:8px 12px;font-size:11px;color:#64748b;font-style:italic;margin-bottom:6px}
+.mc h4{font-size:13px;font-weight:600;color:#e2e8f0;margin-bottom:4px}
+.mc p{font-size:12px;color:#4b5563;line-height:1.5}
+
+/* TIMELINE — Binance saga */
+.timeline{margin-top:1.5rem;position:relative;padding-left:2rem}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,#4ade80,rgba(74,222,128,0.1))}
+.tl-item{position:relative;margin-bottom:1.2rem}
+.tl-dot{position:absolute;left:-1.7rem;top:4px;width:12px;height:12px;border-radius:50%;background:#4ade80;border:2px solid #060912;box-shadow:0 0 6px rgba(74,222,128,0.4)}
+.tl-date{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4ade80;margin-bottom:4px}
+.tl-item h4{font-size:13px;font-weight:600;color:#e2e8f0;margin-bottom:3px}
+.tl-item p{font-size:12px;color:#4b5563;line-height:1.5}
+.tl-item a{font-size:11px;color:#4ade80;text-decoration:none}
+
+/* PUBS */
+.pub-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:1.5rem}
+.pub-badge{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#94a3b8;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:600}
+.pub-badge.hi{border-color:rgba(74,222,128,0.3);color:#4ade80;background:rgba(74,222,128,0.05)}
+
+/* FOOTER */
+.footer{background:#040610;border-top:1px solid rgba(255,255,255,0.05);padding:3rem 2rem;text-align:center}
+.fn{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:4px}
+.fr{font-size:13px;color:#374151;margin-bottom:2rem}
+.cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#15803d,#1d4ed8);color:#fff;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;margin-bottom:2rem}
+.cta:hover{opacity:.85}
+.contacts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:1.5rem}
+.cbtn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#94a3b8;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;transition:all .2s}
+.cbtn:hover{border-color:rgba(74,222,128,0.4);color:#4ade80}
+.cbtn.li{background:#0a66c2;border-color:#0a66c2;color:#fff}
+.cbtn.li:hover{background:#0958aa}
+.pub-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.pub-links a{font-size:12px;color:#374151;text-decoration:none}
+.pub-links a:hover{color:#4ade80}
+a{text-decoration:none;color:inherit}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-pat"></div>
+  <h1>Osato Avan-Nomayo</h1>
+  <p class="hero-tagline">The journalist who <em>broke</em> the biggest crypto regulatory story of 2024 — <em>from inside the country it happened in.</em></p>
+  <div class="tag-cloud">
+    <span class="tc hi">⚖️ Regulatory Reporting</span>
+    <span class="tc hi">🏛️ SEC · MiCA · CFTC</span>
+    <span class="tc hi">🔍 Enforcement & Compliance</span>
+    <span class="tc hi2">📈 ETF · TradFi · Institutional</span>
+    <span class="tc hi2">🏦 AML · KYC · Licensing</span>
+    <span class="tc hi3">🎙️ Exclusive Source Interviews</span>
+    <span class="tc">🌍 Global Policy Coverage</span>
+    <span class="tc">💱 DeFi · Stablecoins · Exchanges</span>
+    <span class="tc">✍️ 7 yrs Journalism</span>
+    <span class="tc">📣 3 yrs Marketing</span>
+    <span class="tc">🔗 10 yrs Web3 Native</span>
+    <span class="tc">📍 Former BeInCrypto Correspondent</span>
+  </div>
+</div>
+
+<!-- STAT BAR -->
+<div class="statbar">
+  <div class="stat"><span class="sn">3,000+</span><span class="sl">Published Articles</span></div>
+  <div class="stat"><span class="sn">10</span><span class="sl">Years in Web3</span></div>
+  <div class="stat"><span class="sn">6</span><span class="sl">Tier-1 Publications</span></div>
+  <div class="stat"><span class="sn">#1</span><span class="sl">Binance/Nigeria Beat</span></div>
+  <div class="stat"><span class="sn">2</span><span class="sl">Top-5 The Block Stories</span></div>
+  <div class="stat"><span class="sn">30%</span><span class="sl">Traffic Growth · DL News</span></div>
+</div>
+
+<!-- OPENING STATEMENT -->
+<div class="statement">
+  <p>BeInCrypto needs a correspondent who <strong>"covers the intersection of crypto, regulation, and global finance"</strong> — someone who can break stories, interview policymakers, and make complex compliance frameworks readable to millions. Osato Avan-Nomayo has done exactly that across every tier-1 crypto publication. He is the journalist who broke the Binance/Nigeria executive detention story, secured an exclusive government minister interview on the $81bn case, tracked every legal development that followed — and authored two of The Block's top-five most-read articles of all time. He is a BeInCrypto alumnus who already knows the platform, the voice, and the audience.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- BINANCE/NIGERIA SAGA — FULL TIMELINE -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-green">🏛️</div>
+    <div>
+      <div class="sh-title">The Binance/Nigeria Saga — Osato's Defining Regulatory Scoop</div>
+      <div class="sh-sub">The biggest crypto enforcement story of 2024 — broken, owned, and followed exclusively by Osato</div>
+    </div>
+  </div>
+
+  <div class="spotlight" style="margin-bottom:1.5rem">
+    <span class="excl-badge">EXCLUSIVE BEAT</span>
+    <div class="sp-label">🎙️ Exclusive Investigative Reporting · DL News · 2024–2025</div>
+    <h3>How Osato owned the biggest crypto-regulatory story of 2024: Binance's $81bn legal war with Nigeria</h3>
+    <p>In February 2024, DL News' end-of-year regulatory review confirmed it: <strong>Osato Avan-Nomayo broke the news</strong> that Nigerian officials had detained two Binance executives — Tigran Gambaryan, the US federal agent heading Binance's financial crime compliance unit, and Nadeem Anjarwalla, the company's regional chief. He then exclusively secured an interview with Nigeria's Minister of Information, <strong>Alhaji Mohammed Idris</strong>, who revealed that evidence of terrorist financing and kidnapper payments was behind the crackdown. Osato tracked every subsequent development — Anjarwalla's Ramadan escape using a hidden Kenyan passport, the Interpol red notice, Gambaryan's deteriorating health in custody, and Nigeria's extraordinary $81 billion tax penalty demand — a fine 18x larger than the $4.3bn Binance paid US authorities in 2023.</p>
+    <div class="impact-strip">
+      <span class="impact">📡 Broke the story first</span>
+      <span class="impact">🎙️ Exclusive minister interview</span>
+      <span class="impact">💰 $81bn penalty tracked</span>
+      <span class="impact">🔎 Interpol red notice reported</span>
+      <span class="impact">⚖️ AML · EFCC · Money laundering</span>
+      <span class="impact">🌍 Embedded Nigeria correspondent</span>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Feb 2024 — Breaking News</div>
+      <h4>Binance executives detained in Nigeria — Osato breaks the story</h4>
+      <p>Nigerian state security detains Tigran Gambaryan and Nadeem Anjarwalla. Osato is first to name them and detail the charges. DL News becomes the global reference point for the story.</p>
+      <a href="https://www.dlnews.com/articles/regulation/heres-how-the-binance-crisis-in-nigeria-unfolded/" target="_blank">↗ Read timeline piece</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Mar 2024 — Exclusive</div>
+      <h4>Anjarwalla escapes Nigeria using hidden Kenyan passport during Ramadan prayer</h4>
+      <p>Osato reports the escape, the diplomatic embarrassment for Nigerian security services, and the subsequent Interpol red notice tracking Anjarwalla to Kenya.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Mar 2025 — Minister Exclusive</div>
+      <h4>Nigeria minister tells DL News: terrorists and kidnappers used Binance — exclusive interview</h4>
+      <p>Osato secures the most senior government source in the case, publishing direct quotes from Minister Idris on national security concerns and the ongoing manhunt.</p>
+      <a href="https://www.dlnews.com/articles/regulation/escaped-binance-exec-still-on-nigeria-and-interpol-radar/" target="_blank">↗ Read manhunt update</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Apr 2025 — Legal Analysis</div>
+      <h4>Binance fights $81bn Nigerian penalty — arguing prosecutors used wrong email address</h4>
+      <p>Osato reports Binance's courtroom attempt to invalidate the $81bn tax fine on procedural grounds, and what the outcome means for the world's largest crypto exchange operating in emerging markets.</p>
+      <a href="https://www.dlnews.com/articles/regulation/binances-head-spinning-response-to-81bn-penalty-deepens-clash-with-nigeria-a-timeline/" target="_blank">↗ Read legal analysis</a>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Feb 2025 — Regulatory Feature</div>
+      <h4>Nigeria launches state-approved stablecoin cNGN amid Binance crisis — but it's pegged to one of Africa's most volatile currencies</h4>
+      <p>Osato covers the licensing angle: Nigeria's attempt to issue a compliant, government-sanctioned crypto instrument as it fights the world's biggest exchange over unlicensed operations.</p>
+      <a href="https://www.dlnews.com/articles/regulation/how-nigeria-push-to-get-past-fight-with-binance-hit-snag/" target="_blank">↗ Read stablecoin piece</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SEC & POLICY SECTION -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-blue">🏛️</div>
+    <div>
+      <div class="sh-title">SEC & Global Regulatory Policy</div>
+      <div class="sh-sub">Tracking how regulators remake the rules — from Gensler's crackdown to Atkins' reset</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct ct-blue"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · Mar 2025</div>
+      <h3>Paul Atkins won't just change the SEC's rules on crypto — he'll rewrite the agency's entire regulatory playbook</h3>
+      <p>Osato's authoritative pre-confirmation analysis of what the Atkins era means for crypto. Assessed the halt of all Gensler-era enforcement actions against Binance, Ripple, and Coinbase, and examined the unprecedented situation where Atkins would regulate President Trump's own crypto ventures — World Liberty Financial and the Truth Social ETF partnership.</p>
+      <div class="cfoot"><span class="chip ch-blue">SEC · Policy Shift</span><a href="https://muckrack.com/osato-avan-nomayo/articles" class="clink" target="_blank">↗ Read</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-blue"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · Apr 2025</div>
+      <h3>Who is Paul Atkins? Trump's new SEC chair has a history of backing crypto — and a conflict of interest unlike any in the agency's history</h3>
+      <p>Deep profile of the incoming SEC chair: his deregulatory record, his crypto industry ties, and the conflict posed by regulating the president's own digital asset business. Quoted extensively by other outlets. Demonstrates the regulatory sourcing and legal interpretation skills this role demands.</p>
+      <div class="cfoot"><span class="chip ch-blue">SEC Chair Profile</span><a href="https://www.dlnews.com/articles/people-culture/who-is-paul-atkin-trumps-new-sec-chair-has-a-history-of-backing-crypto/" class="clink" target="_blank">↗ Read</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-blue"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Grayscale XRP and Dogecoin ETF applications acknowledged by SEC — altcoin ETF era officially begins</h3>
+      <p>Osato broke down the legal significance of the SEC's acknowledgment process, interpreted the regulatory probability of approval, and connected the SEC's institutional stance to the broader altcoin investment landscape — threading law, regulation, and market impact in a single piece.</p>
+      <div class="cfoot"><span class="chip ch-blue">SEC · ETF · Altcoins</span><a href="https://muckrack.com/osato-avan-nomayo/articles" class="clink" target="_blank">↗ Read</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-blue"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Trump Media and Crypto.com partner to launch ETFs — SEC conflict of interest looms over approval process</h3>
+      <p>Covered the regulatory dimension of a president's media company creating exchange-traded crypto products, examined the SEC's role in approving products from the president's own business empire, and traced the backlash from the crypto industry over token supply manipulation by Crypto.com.</p>
+      <div class="cfoot"><span class="chip ch-blue">SEC · ETF Regulation</span><a href="https://muckrack.com/osato-avan-nomayo/articles" class="clink" target="_blank">↗ Read</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-red"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>What happens next in the SEC's fight with Binance will shape crypto policy for years</h3>
+      <p>Landmark policy analysis of the SEC's most consequential enforcement action. Legal experts quoted in this piece specifically cited Osato by name in LinkedIn posts praising the depth of the regulatory interpretation — direct evidence of source-level authority in crypto compliance circles.</p>
+      <div class="cfoot"><span class="chip ch-red">SEC Enforcement</span><a href="https://muckrack.com/osato-avan-nomayo/articles" class="clink" target="_blank">↗ Read</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-cyan"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Central banks warn: $9bn in tokenised money-market funds and DeFi pose systemic risk to global finance</h3>
+      <p>Reported the BIS warning on tokenised US financial instruments — connecting DeFi regulation, AML risk, and the macroeconomic frameworks that MiCA and the SEC are scrambling to address. Pure regulatory-financial policy reporting at its most consequential.</p>
+      <div class="cfoot"><span class="chip ch-cyan">BIS · DeFi · Systemic Risk</span><a href="https://www.dlnews.com/articles/regulation/bis-warns-defi-9bn-tokenised-money-market-funds-risks/" class="clink" target="_blank">↗ Read</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ETF, TradFi & INSTITUTIONAL ADOPTION -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-amber">📈</div>
+    <div>
+      <div class="sh-title">ETF, TradFi & Institutional Adoption</div>
+      <div class="sh-sub">Tracking the moment Wall Street met the blockchain — and what the regulators made of it</div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="spotlight" style="border-color:rgba(251,191,36,0.2)">
+      <div class="sp-label" style="color:#fbbf24">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        Flagship Story · DL News · 2025
+      </div>
+      <h3>Bitcoin ETFs record $934M in single-day outflows — the largest ever, as BTC slumps to 2025 lows</h3>
+      <p>The definitive account of Bitcoin ETF markets unwinding in real time. Osato connected the basis trade collapse, the institutional capitulation, and the macro signals in a single authoritative story — demonstrating the exact TradFi-meets-crypto fluency BeInCrypto's regulatory coverage requires.</p>
+      <div class="impact-strip" style="--c:rgba(251,191,36,0.5)">
+        <span class="impact" style="color:#fbbf24;border-color:rgba(251,191,36,0.2)">📉 $934M outflow — record</span>
+        <span class="impact" style="color:#fbbf24;border-color:rgba(251,191,36,0.2)">🏦 Institutional basis trade unwind</span>
+        <span class="impact" style="color:#fbbf24;border-color:rgba(251,191,36,0.2)">📊 Macro + ETF + price action</span>
+      </div>
+    </div>
+    <div class="spotlight" style="border-color:rgba(96,165,250,0.2);background:linear-gradient(135deg,#080f1e 0%,#060a18 100%)">
+      <div class="sp-label" style="color:#60a5fa">🏦 TradFi Meets DeFi · DL News · 2025</div>
+      <h3>The next DeFi boom might be stocks, not bonds — Robinhood CEO eyes 24/7 on-chain trading for tokenized US equities</h3>
+      <p>Covered the legal and compliance challenge of tokenized US stocks on public blockchains — a question that sits squarely inside SEC jurisdiction. Traced Robinhood's regulatory pathway, what it means for the SEC's existing securities frameworks, and why it could force the most significant rewrite of US financial law since Dodd-Frank.</p>
+      <div class="impact-strip">
+        <span class="impact" style="color:#60a5fa;border-color:rgba(96,165,250,0.2)">⚖️ Securities law implications</span>
+        <span class="impact" style="color:#60a5fa;border-color:rgba(96,165,250,0.2)">🏦 TradFi + DeFi convergence</span>
+        <span class="impact" style="color:#60a5fa;border-color:rgba(96,165,250,0.2)">📋 Regulatory pathway analysis</span>
+      </div>
+    </div>
+  </div>
+  <div class="g3" style="margin-top:14px">
+    <div class="card">
+      <div class="ct ct-amber"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>XRP ETF approval odds hit 87% on Polymarket — Ripple CEO confirms SEC drops long-running case</h3>
+      <p>Combined regulatory news (SEC case dropped), ETF pipeline analysis (multiple altcoin applications in review), and live prediction market data — the three-dimensional regulatory-market view BeInCrypto readers demand.</p>
+      <div class="cfoot"><span class="chip ch-amber">ETF · Ripple · SEC</span><a href="https://muckrack.com/osato-avan-nomayo/articles" class="clink" target="_blank">↗ Read</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-amber"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Crypto market loses a third of value — Trump rally gains erased as institutional players pull back</h3>
+      <p>Macro regulatory analysis connecting the US administration's crypto policy stance to institutional capital flow reversals — contextualising compliance-driven sell-offs and AML-constrained institutional re-entry patterns in a single accessible story.</p>
+      <div class="cfoot"><span class="chip ch-amber">Macro · Institutional · Policy</span><a href="https://muckrack.com/osato-avan-nomayo/articles" class="clink" target="_blank">↗ Read</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-green"></div>
+      <div class="cpub"><span class="d d-tb"></span> The Block · 2022</div>
+      <h3>Terra Luna collapse — two-week early warning published before the $40bn wipeout</h3>
+      <p>Published the warning that the Terra/Luna ecosystem was structurally fragile two weeks before the $40bn algorithmic stablecoin collapse. The story became one of The Block's top-five most-read articles ever — a prescient regulatory and macroeconomic call that defined Osato's analytical reputation.</p>
+      <div class="cfoot"><span class="chip ch-green">Stablecoin Risk · Top-5 Story</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- VIRAL STORIES — The Block Twitter / X -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-amber">🔥</div>
+    <div>
+      <div class="sh-title">Viral Impact — The Block's Most-Engaged Stories</div>
+      <div class="sh-sub">Osato authored two of The Block's top-five most-read articles ever, and his DL News regulatory scoops consistently drove the industry conversation on X/Twitter</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="viral-card">
+      <div class="ct ct-amber"></div>
+      <div class="viral-top">
+        <div class="viral-pub"><span class="d d-tb"></span> The Block</div>
+        <span class="viral-badge">🏆 Top-5 All-Time</span>
+      </div>
+      <h3>Terra Luna collapse — early warning two weeks before the $40bn algorithmic stablecoin implosion</h3>
+      <p>Recognised on The Block's all-time most-read list. Widely shared across crypto Twitter as the algorithmic stablecoin failure unfolded live. Industry analysts, regulators, and retail investors all cited this piece as their warning signal — the textbook definition of viral regulatory journalism.</p>
+      <div class="eng-row">
+        <span class="eng"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Top-5 all-time</span>
+        <span class="eng"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> Widely reposted</span>
+        <span class="eng">⚠️ Regulators cited</span>
+      </div>
+    </div>
+    <div class="viral-card">
+      <div class="ct ct-amber"></div>
+      <div class="viral-top">
+        <div class="viral-pub"><span class="d d-tb"></span> The Block</div>
+        <span class="viral-badge">🏆 Top-5 All-Time</span>
+      </div>
+      <h3>Second Top-5 all-time story — The Block's most-read crypto ecosystems coverage</h3>
+      <p>Osato is the only DeFi correspondent at The Block to have authored two stories on the publication's all-time top-5 most-read list — a feat that speaks to consistent editorial relevance, not a single viral moment. Demonstrating the sustained ability to produce industry-defining stories.</p>
+      <div class="eng-row">
+        <span class="eng"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Top-5 all-time</span>
+        <span class="eng">📊 Sustained engagement</span>
+      </div>
+    </div>
+    <div class="viral-card">
+      <div class="ct ct-green"></div>
+      <div class="viral-top">
+        <div class="viral-pub"><span class="d d-dl"></span> DL News · 2024</div>
+        <span class="viral-badge">🔥 Industry Wide Pickup</span>
+      </div>
+      <h3>Binance Nigeria executive detention — broke globally, shared by every major crypto outlet within hours</h3>
+      <p>Osato's February 2024 scoop on the Binance executive detentions was credited by DL News' year-end review as the single most impactful regulatory story they published. LinkedIn posts from legal experts specifically named and credited Osato's reporting. DL News' Regulation section traffic spiked on the back of the story.</p>
+      <div class="eng-row">
+        <span class="eng">📡 Global pickup</span>
+        <span class="eng">⚖️ Legal experts cited</span>
+        <span class="eng">🔥 Traffic spike</span>
+      </div>
+    </div>
+    <div class="viral-card">
+      <div class="ct ct-blue"></div>
+      <div class="viral-top">
+        <div class="viral-pub"><span class="d d-dl"></span> DL News · 2025</div>
+        <span class="viral-badge">📣 High Engagement</span>
+      </div>
+      <h3>Paul Atkins SEC profile — reposted by lawyers, compliance officers and crypto executives across X/Twitter</h3>
+      <p>The Atkins profile and confirmation analysis generated significant engagement from the legal and compliance community — exactly BeInCrypto's target readership for regulatory content. LinkedIn interactions confirmed that compliance professionals were circulating the story as the reference piece on the new SEC leadership.</p>
+      <div class="eng-row">
+        <span class="eng">🏛️ Compliance community</span>
+        <span class="eng">🔁 Quoted by other outlets</span>
+        <span class="eng">⚖️ Legal expert engagement</span>
+      </div>
+    </div>
+    <div class="viral-card">
+      <div class="ct ct-red"></div>
+      <div class="viral-top">
+        <div class="viral-pub"><span class="d d-dl"></span> DL News · 2024</div>
+        <span class="viral-badge">🌍 Global Syndication</span>
+      </div>
+      <h3>Binance Nigeria timeline — co-authored definitive longform of crypto's biggest enforcement saga; syndicated to Yahoo Finance and more</h3>
+      <p>The comprehensive timeline piece tracking the full Binance/Nigeria arc was picked up and syndicated to Yahoo Finance, Inside Bitcoins, BeInCrypto, Cointelegraph, and multiple international outlets — the broadest distribution of any DL News regulation story in 2024.</p>
+      <div class="eng-row">
+        <span class="eng">📰 Yahoo Finance syndicated</span>
+        <span class="eng">🌏 Multi-outlet pickup</span>
+        <span class="eng">🔗 BeInCrypto featured</span>
+      </div>
+    </div>
+    <div class="viral-card">
+      <div class="ct ct-amber"></div>
+      <div class="viral-top">
+        <div class="viral-pub"><span class="d d-dl"></span> DL News · 2025</div>
+        <span class="viral-badge">📈 Traffic Driver</span>
+      </div>
+      <h3>Bitcoin ETF $934M outflow — driven DL News' single biggest traffic day on ETF coverage</h3>
+      <p>ETF flow stories are among the most-clicked regulatory content on crypto platforms. Osato's $934M outflow piece drove outsized engagement from institutional readers and was cited as a key factor in the 30% site traffic growth he produced at DL News in H1 2025.</p>
+      <div class="eng-row">
+        <span class="eng">📊 Institutional readership</span>
+        <span class="eng">🏦 ETF community pickup</span>
+        <span class="eng">📈 Traffic growth driver</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- JD REQUIREMENT MATCH -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-cyan">✅</div>
+    <div>
+      <div class="sh-title">BeInCrypto JD — Requirement by Requirement</div>
+      <div class="sh-sub">Every task and requirement in the job description, mapped directly to Osato's documented track record</div>
+    </div>
+  </div>
+  <div class="match-grid">
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"Cover major regulatory, legal, and financial developments across crypto and TradFi"</div>
+        <h4>Core beat for 7 years</h4>
+        <p>SEC enforcement, Binance/Nigeria legal saga, BIS warnings, tokenized stocks, ETF approvals — Osato has covered every pillar of this beat at tier-1 publications.</p>
+      </div>
+    </div>
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"Monitor MiCA, SEC policies, AML/KYC requirements, licensing, and digital asset compliance"</div>
+        <h4>Deep framework fluency</h4>
+        <p>Covered Nigeria's unlicensed exchange crackdown (licensing), Binance's $35M money laundering case (AML), SEC enforcement pivots (policy), and Nigeria's state stablecoin launch (compliance).</p>
+      </div>
+    </div>
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"Conduct interviews with legal experts, policymakers, analysts, regulators, and industry leaders"</div>
+        <h4>Government minister, compliance VPs, legal academics</h4>
+        <p>Exclusive interview with Nigeria's Minister of Information. Legal expert quotes in SEC/Binance coverage. Regulatory analysts and crypto industry executives sourced consistently.</p>
+      </div>
+    </div>
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"Analyze how regulatory developments impact exchanges, DeFi, stablecoins, and institutional adoption"</div>
+        <h4>Cross-sector regulatory analysis</h4>
+        <p>Paul Atkins' impact on exchanges (Binance, Ripple, Coinbase), stablecoin compliance (cNGN, BIS warnings), institutional adoption (ETF flows, Robinhood tokenised stocks), DeFi systemic risk.</p>
+      </div>
+    </div>
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"React quickly to breaking market, regulatory, and financial news"</div>
+        <h4>First-mover on every major story</h4>
+        <p>Broke Binance Nigeria detentions globally. Published Terra Luna collapse warning two weeks ahead of the market. First to report $934M Bitcoin ETF outflow context.</p>
+      </div>
+    </div>
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"3–5 years experience in crypto journalism, financial media, legal reporting, or regulatory analysis"</div>
+        <h4>7 years journalism · 10 years Web3</h4>
+        <p>Significantly exceeds the requirement. 7 years across BeInCrypto, Bitcoinist, CoinTelegraph, The Block, and DL News. Over 3,000 published articles.</p>
+      </div>
+    </div>
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"Simplify complex legal and regulatory topics into clear, engaging content"</div>
+        <h4>Audience clarity is his defining skill</h4>
+        <p>Himalayas profile confirms: "increased engagement by 25% by translating complex concepts into decisive takeaways." Two of The Block's all-time top-5 most-read articles demonstrate mass-audience reach.</p>
+      </div>
+    </div>
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"Established network within the crypto, legal, regulatory, or financial ecosystem"</div>
+        <h4>Government, industry, and legal sources on record</h4>
+        <p>Nigerian government ministers. Binance executives. SEC/regulatory lawyers (cited in his coverage). DeFi founders and protocol teams. A decade of source-building across every layer of the industry.</p>
+      </div>
+    </div>
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"Being available to attend industry events and conferences in the USA is a plus"</div>
+        <h4>Remote-based, conference-ready</h4>
+        <p>Nigeria-based with a track record of covering global conference-driven stories. TOKEN2049, Paris Blockchain Week, and EthCC are all events Osato has reported from or around as a remote DL News correspondent.</p>
+      </div>
+    </div>
+    <div class="mc">
+      <div class="check">✓</div>
+      <div>
+        <div class="jd-q">"Pitch exclusive stories, investigations, and in-depth analysis"</div>
+        <h4>Multiple exclusives on record</h4>
+        <p>Exclusive government minister interview. Exclusive Interpol manhunt updates. Early-warning Terra Luna reporting two weeks before collapse. All generated from proactive, independent editorial initiative.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PUBLICATIONS -->
+<div style="padding:2.5rem 2rem;text-align:center;max-width:800px;margin:0 auto">
+  <p style="font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#4ade80;margin-bottom:.5rem">Published Across</p>
+  <p style="font-size:12px;color:#4b5563;margin-bottom:1rem">Including BeInCrypto — where Osato's journalism career began</p>
+  <div class="pub-row">
+    <span class="pub-badge hi">DL News</span>
+    <span class="pub-badge hi">The Block</span>
+    <span class="pub-badge hi">BeInCrypto ★</span>
+    <span class="pub-badge">CoinTelegraph</span>
+    <span class="pub-badge">Bitcoinist</span>
+    <span class="pub-badge">Crypto.news</span>
+  </div>
+  <p style="font-size:11px;color:#374151;margin-top:.8rem">★ BeInCrypto is where Osato's journalism career began — he already knows the platform, the editorial voice, and the audience.</p>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="fn">Osato Avan-Nomayo</div>
+  <div class="fr">DeFi Correspondent · DL News &nbsp;|&nbsp; formerly The Block · CoinTelegraph · BeInCrypto · Bitcoinist</div>
+  <a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="cta">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Full Portfolio on Muckrack
+  </a>
+  <div class="contacts">
+    <a href="tel:+2348111571785" class="cbtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.55 3.18 2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.7a16 16 0 0 0 6.4 6.4l1.06-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      +234 811 157 1785
+    </a>
+    <a href="mailto:sato.nomayo@gmail.com" class="cbtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      sato.nomayo@gmail.com
+    </a>
+    <a href="http://www.linkedin.com/in/osato-avan-nomayo-a6308b171" target="_blank" class="cbtn li">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      LinkedIn
+    </a>
+  </div>
+  <div class="pub-links">
+    <a href="https://www.dlnews.com/authors/Osato-Avan-Nomayo/" target="_blank">DL News ↗</a>
+    <a href="https://www.theblock.co/author/osato-avan-nomayo" target="_blank">The Block ↗</a>
+    <a href="https://beincrypto.com/author/osato/" target="_blank">BeInCrypto ↗</a>
+    <a href="https://cointelegraph.com/authors/osato-avan-nomayo" target="_blank">CoinTelegraph ↗</a>
+  </div>
+</div>
+</body>
+</html>
